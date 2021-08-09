@@ -129,10 +129,8 @@ def is_exclusive(em: energymon) -> bool:
 
     Notes
     -----
-    The energymon must be initialized.
+    The energymon doesn't need to be initialized.
     """
     if not em.fexclusive:
         raise ValueError('\'fexclusive\' not set - did you \'get\' the energymon?')
-    if em.fexclusive(pointer(em)) == 0:
-        return False
-    return True
+    return bool(em.fexclusive())
