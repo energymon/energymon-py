@@ -43,8 +43,7 @@ def init(em: energymon):
     if not em.finit:
         raise ValueError('\'finit\' not set - did you \'get\' the energymon?')
     set_errno(0)
-    val = em.finit(pointer(em))
-    if val != 0:
+    if em.finit(pointer(em)) != 0:
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
 
@@ -53,8 +52,7 @@ def finish(em: energymon):
     if not em.ffinish:
         raise ValueError('\'ffinish\' not set - did you \'get\' the energymon?')
     set_errno(0)
-    val = em.ffinish(pointer(em))
-    if val != 0:
+    if em.ffinish(pointer(em)) != 0:
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
 
@@ -135,7 +133,6 @@ def is_exclusive(em: energymon) -> bool:
     """
     if not em.fexclusive:
         raise ValueError('\'fexclusive\' not set - did you \'get\' the energymon?')
-    val = em.fexclusive(pointer(em))
-    if val == 0:
+    if em.fexclusive(pointer(em)) == 0:
         return False
     return True
