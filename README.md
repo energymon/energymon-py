@@ -26,32 +26,71 @@ pip install .
 ## Usage
 
 The module exposes an `energymon` class, which is a binding to the `energymon` C struct.
-Users can load an energymon library and "get" the struct to populate its function pointers.
+First, users are responsible for loading an energymon library using ctypes.
 For example:
 
 ```Python
-from ctypes import CDLL, pointer
+from ctypes import CDLL
+from ctypes.util import find_library
+
+# by name:
+lib = CDLL("libenergymon-default.so", use_errno=True)
+
+# or by finding the library:
+lib = CDLL(find_library("energymon-default"), use_errno=True)
+```
+
+The module exposes some utilities to simplify usage, e.g., to "get" the energymon, handle pointers, convert data types, check for errors, and raise exceptions.
+For example:
+
+```Python
+from energymon import util
+
+em = util.get_energymon(lib, 'energymon_get_default')
+print(util.get_source(em))
+util.init(em)
+try:
+    print(util.get_uj(em))
+finally:
+    util.finish(em)
+```
+
+
+### Direct bindings
+
+To directly use the energymon API, create and "get" the struct to populate its function pointers, then initialize, do work, and cleanup when finished.
+For example:
+
+```Python
+from ctypes import pointer, create_string_buffer, sizeof, set_errno, get_errno
 from energymon import energymon
 
-lib = CDLL("libenergymon-default.so", use_errno=True)
 em = energymon()
 pem = pointer(em)
 
 if lib.energymon_get_default(pem) != 0:
-    # handle failure...
-```
+    # handle error...
+    exit(1)
 
-Then initialize, do work like get readings, and cleanup when finished:
+name = create_string_buffer(256)
+if not em.fsource(name, sizeof(name)):
+    # handle error
+    exit(1)
 
-```Python
+print(name.value.decode())
 if em.finit(pem) != 0:
-    # handle failure...
-uj_start = em.fread(pem)
-# do work...
-uj_end = em.fread(pem)
-# do something with readings...
+    # handle error
+    exit(1)
+
+set_errno(0)
+uj = em.fread(pem)
+if uj == 0 and get_errno() != 0:
+    # handle error (but don't skip cleanup!)
+    pass
+
 if em.ffinish(pem) != 0:
-    # handle failure...
+    # handle error
+    exit(1)
 ```
 
 
