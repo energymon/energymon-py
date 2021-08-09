@@ -33,11 +33,12 @@ For example:
 from ctypes import CDLL
 from ctypes.util import find_library
 
-# by name:
-lib = CDLL("libenergymon-default.so", use_errno=True)
-
-# or by finding the library:
-lib = CDLL(find_library("energymon-default"), use_errno=True)
+# maybe try to find the library by name:
+lib_path = find_library("energymon-default")
+if lib_path is None:
+    # maybe fall back on a relative or absolute path
+    lib_path = "libenergymon-default.so"
+lib = CDLL(lib_path, use_errno=True)
 ```
 
 The module exposes some utilities to simplify usage, e.g., to "get" the energymon, handle pointers, convert data types, check for errors, and raise exceptions.

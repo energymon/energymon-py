@@ -11,7 +11,14 @@ if len(sys.argv) > 1:
 if len(sys.argv) > 2:
     fn_get_name = sys.argv[2]
 
-lib = CDLL(find_library(lib_name), use_errno=True)
+# First try to find the library
+# Interestingly, this doesn't seem to work on OSX when given the full path
+lib_path = find_library(lib_name)
+if lib_path is None:
+    # Fall back on using the given string (presumed relative or absolute path)
+    lib_path = lib_name
+lib = CDLL(lib_path, use_errno=True)
+
 em = util.get_energymon(lib, fn_get_name)
 print('source:', util.get_source(em))
 util.init(em)
