@@ -1,0 +1,52 @@
+matrix:
+  include:
+    # xenial runs all versions listed below by default
+    - os: linux
+      dist: xenial
+    # test the oldest and newest python versions for linux dists
+    - os: linux
+      dist: focal
+      python: "3.5"
+    - os: linux
+      dist: focal
+      python: "3.9"
+    - os: linux
+      dist: bionic
+      python: "3.5"
+    - os: linux
+      dist: bionic
+      python: "3.9"
+    # test recent osx xcode
+    - os: osx
+      osx_image: xcode12.5
+      language: shell       # 'language: python' is an error on Travis CI macOS
+
+language: python
+
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+  # - "3.9-dev"  # 3.9 development branch
+  - "nightly"  # nightly build
+
+before_install:
+  # energymon dependency - use master branch
+  - git clone https://github.com/energymon/energymon.git
+  - mkdir energymon/_build
+  - pushd energymon/_build
+  - cmake -DBUILD_SHARED_LIBS=ON -DENERGYMON_BUILD_DEFAULT=NONE -DENERGYMON_BUILD_LIB=dummy -DENERGYMON_BUILD_UTILITIES=OFF -DENERGYMON_BUILD_TESTS=OFF -DENERGYMON_BUILD_EXAMPLES=OFF ..
+  - cmake --build .
+  - popd
+
+install:
+  # all OSes agree about 'pip3'
+  # - pip3 install -r requirements.txt
+  - pip3 install .
+
+script:
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then LIB=libenergymon-dummy.so; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then LIB=libenergymon-dummy.dylib; fi
+  - python3 examples/info.py "energymon/_build/dummy/${LIB}" energymon_get_dummy
