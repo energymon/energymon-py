@@ -14,7 +14,13 @@ The `energymon` libraries should be installed to the system and on the library s
 The latest `energymon` C libraries can be found at https://github.com/energymon/energymon.
 
 
-## Building
+## Installing
+
+The `energymon` package is published in the Python Package Index and installable with pip:
+
+```sh
+pip install energymon
+```
 
 To install from source:
 
