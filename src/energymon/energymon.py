@@ -1,4 +1,4 @@
-"""Bindings for energymon.h"""
+"""Bindings for ``energymon.h``"""
 from ctypes import (
     CFUNCTYPE, POINTER,
     Structure,
@@ -6,7 +6,7 @@ from ctypes import (
 )
 
 class energymon(Structure):
-    """Binding to energymon struct."""
+    """Binding to ``energymon`` struct."""
 
 energymon_init = CFUNCTYPE(c_int, POINTER(energymon), use_errno=True)
 energymon_read_total = CFUNCTYPE(c_ulonglong, POINTER(energymon), use_errno=True)

@@ -1,7 +1,7 @@
 """
-Utilities for using an energymon.
+Utilities for using an ``energymon``.
 
-See documentation in the native energymon.h header file for additional details.
+See documentation in the native ``energymon.h`` header file for additional details.
 """
 import os
 from ctypes import (
@@ -12,20 +12,19 @@ from .energymon import energymon
 
 def get_energymon(lib, func_get='energymon_get_default') -> energymon:
     """
-    Create an energymon and 'get' it (populate its function pointers), but do
-    not initialize it.
+    Create an ``energymon`` and "get" it (populate its function pointers), but do not initialize it.
 
     Parameters
     ----------
     lib : ctypes library
-        An energymon library loaded by ctypes (e.g., a CDLL).
+        An ``energymon`` library loaded by ``ctypes`` (e.g., a ``CDLL``).
     func_get : str
-        The library function name used to populate the energymon struct.
+        The library function name used to populate the ``energymon`` struct.
 
     Returns
     -------
     energymon
-        An uninitialized energymon instance.
+        An uninitialized ``energymon`` instance.
 
     Raises
     ------
@@ -37,9 +36,8 @@ def get_energymon(lib, func_get='energymon_get_default') -> energymon:
 
     Notes
     -----
-    Assumes a standard "get" function prototype: int (get) (energymon*)
-    All known instances use this prototype, but the energymon API doesn't
-    actually define this.
+    Assumes a standard "get" function prototype: ``int (get) (energymon*)``.
+    All known instances use this prototype, but the energymon API doesn't actually define this.
     """
     energymon_get = CFUNCTYPE(c_int, POINTER(energymon), use_errno=True)
     energymon_get_impl = energymon_get((func_get, lib))
@@ -52,12 +50,12 @@ def get_energymon(lib, func_get='energymon_get_default') -> energymon:
 
 def init(em: energymon):
     """
-    Initialize the energymon (initialize private state).
+    Initialize the ``energymon`` (initialize private state).
 
     Parameters
     ----------
     em : energymon
-        The energymon must not be initialized.
+        The ``energymon`` must not be initialized.
 
     Raises
     ------
@@ -75,12 +73,12 @@ def init(em: energymon):
 
 def finish(em: energymon):
     """
-    Finish the energymon (clean up private state).
+    Finish the ``energymon`` (clean up private state).
 
     Parameters
     ----------
     em : energymon
-        The energymon must be initialized.
+        The ``energymon`` must be initialized.
 
     Raises
     ------
@@ -102,7 +100,7 @@ def get_uj(em: energymon) -> int:
     Parameters
     ----------
     em : energymon
-        The energymon must be initialized.
+        The ``energymon`` must be initialized.
 
     Returns
     -------
@@ -131,7 +129,7 @@ def get_source(em: energymon, maxlen=256, encoding='UTF-8', errors='strict') -> 
     Parameters
     ----------
     em : energymon
-        The energymon doesn't need to be initialized.
+        The ``energymon`` doesn't need to be initialized.
 
     Returns
     -------
@@ -160,7 +158,7 @@ def get_interval_us(em: energymon) -> int:
     Parameters
     ----------
     em : energymon
-        The energymon must be initialized.
+        The ``energymon`` must be initialized.
 
     Returns
     -------
@@ -193,13 +191,13 @@ def get_precision_uj(em: energymon) -> int:
     Parameters
     ----------
     em : energymon
-        The energymon must be initialized.
+        The ``energymon`` must be initialized.
 
     Returns
     -------
     int
         The best possible possible read precision in microjoules.
-        If 0 < precision <= 1, returns 1.
+        If ``0 < precision <= 1``, returns 1.
         If the precision is unknown, returns 0.
 
     Raises
@@ -228,7 +226,7 @@ def is_exclusive(em: energymon) -> bool:
     Parameters
     ----------
     em : energymon
-        The energymon doesn't need to be initialized.
+        The ``energymon`` doesn't need to be initialized.
 
     Returns
     -------
