@@ -2,7 +2,7 @@
 
 [![Documentation Status](https://readthedocs.org/projects/energymon-py/badge/?version=latest)](https://energymon-py.readthedocs.io/en/latest/?badge=latest)
 
-This project provides Python bindings to energymon libraries.
+This project provides Python bindings to [energymon](https://github.com/energymon/energymon) libraries.
 
 If using this project for other scientific works or publications, please reference:
 
