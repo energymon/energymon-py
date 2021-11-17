@@ -8,7 +8,7 @@ from ctypes import (
     CFUNCTYPE, POINTER,
     c_int, create_string_buffer, get_errno, set_errno, pointer, sizeof
 )
-from .energymon import energymon
+from . import energymon
 
 def get_energymon(lib, func_get='energymon_get_default') -> energymon:
     """
