@@ -1,3 +1,4 @@
+# pylint: disable=C0103, R0903, W0212
 """Bindings for the native interface defined in ``energymon.h``"""
 
 from ctypes import (
