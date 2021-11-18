@@ -7,7 +7,7 @@ See documentation in the native ``energymon.h`` header file for additional detai
 import os
 from ctypes import (
     CFUNCTYPE, POINTER,
-    c_int, create_string_buffer, get_errno, set_errno, pointer, sizeof
+    byref, c_int, create_string_buffer, get_errno, set_errno, sizeof
 )
 from . import energymon
 
@@ -44,7 +44,7 @@ def get_energymon(lib, func_get='energymon_get_default') -> energymon:
     energymon_get_impl = energymon_get((func_get, lib))
     em = energymon()
     set_errno(0)
-    if energymon_get_impl(pointer(em)) != 0:
+    if energymon_get_impl(byref(em)) != 0:
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
     return em
@@ -68,7 +68,7 @@ def init(em: energymon):
     if not em.finit:
         raise ValueError('\'finit\' not set - did you \'get\' the energymon?')
     set_errno(0)
-    if em.finit(pointer(em)) != 0:
+    if em.finit(byref(em)) != 0:
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
 
@@ -90,7 +90,7 @@ def finish(em: energymon):
     if not em.ffinish:
         raise ValueError('\'ffinish\' not set - did you \'get\' the energymon?')
     set_errno(0)
-    if em.ffinish(pointer(em)) != 0:
+    if em.ffinish(byref(em)) != 0:
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
 
@@ -117,7 +117,7 @@ def get_uj(em: energymon) -> int:
     if not em.fread:
         raise ValueError('\'fread\' not set - did you \'get\' the energymon?')
     set_errno(0)
-    val = em.fread(pointer(em))
+    val = em.fread(byref(em))
     errno = get_errno()
     if val == 0 and errno != 0:
         raise OSError(errno, os.strerror(errno))
@@ -176,7 +176,7 @@ def get_interval_us(em: energymon) -> int:
     """
     if not em.finterval:
         raise ValueError('\'finterval\' not set - did you \'get\' the energymon?')
-    val = em.finterval(pointer(em))
+    val = em.finterval(byref(em))
     if val == 0:
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
@@ -210,7 +210,7 @@ def get_precision_uj(em: energymon) -> int:
     if not em.fprecision:
         raise ValueError('\'fprecision\' not set - did you \'get\' the energymon?')
     set_errno(0)
-    val = em.fprecision(pointer(em))
+    val = em.fprecision(byref(em))
     errno = get_errno()
     if val == 0 and errno != 0:
         raise OSError(errno, os.strerror(errno))
