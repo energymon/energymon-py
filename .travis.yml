@@ -6,16 +6,16 @@ matrix:
     # test the oldest and newest python versions for linux dists
     - os: linux
       dist: focal
-      python: "3.5"
+      python: "3.6"
     - os: linux
       dist: focal
-      python: "3.9"
+      python: "3.10"
     - os: linux
       dist: bionic
-      python: "3.5"
+      python: "3.6"
     - os: linux
       dist: bionic
-      python: "3.9"
+      python: "3.10"
     # test recent osx xcode
     - os: osx
       osx_image: xcode12.5
@@ -24,7 +24,6 @@ matrix:
 language: python
 
 python:
-  - "3.5"
   - "3.6"
   - "3.7"
   - "3.8"
