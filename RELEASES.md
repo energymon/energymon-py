@@ -4,8 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Minimum Python version specification in setup.
+- Sphinx documentation - published on [Read the Docs](https://energymon-py.readthedocs.io/).
+- Unit tests.
+
+### Changed
+- Minimum Python version is now 3.6.
+
+### Removed
+- The `energymon` submodule - C structure bindings now specified at module top level.
+
+
 ## [0.0.1] - 2021-08-10
 
 - Initial release
 
+[Unreleased]: https://github.com/energymon/energymon-py/compare/v0.0.1...HEAD
 [0.0.1]: https://github.com/energymon/energymon-py/releases/tag/v0.0.1
