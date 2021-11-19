@@ -24,7 +24,9 @@ class TestEnergymonUtil(unittest.TestCase):
     def test_get_energymon(self):
         enm = util.get_energymon(load_default_lib())
         self.assertIsInstance(enm, energymon)
-        # TODO: how to test functions are set - currently always should CFUNCTYPE before/after get
+        for fptr in [enm.finit, enm.fread, enm.ffinish, enm.fsource, enm.finterval, enm.fprecision,
+                     enm.fexclusive]:
+            self.assertTrue(fptr)
 
     def test_init_finish(self):
         enm = util.get_energymon(load_default_lib())

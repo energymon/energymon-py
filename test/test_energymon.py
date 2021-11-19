@@ -19,8 +19,17 @@ class TestEnergymon(unittest.TestCase):
     def get_default_energymon(self):
         lib = load_default_lib()
         enm = energymon()
-        # TODO: Be able to set and check NULL values on function pointers, then test them
+        # Before "getting" the energymon, function pointers should be NULL
+        for fptr in [enm.finit, enm.fread, enm.ffinish, enm.fsource, enm.finterval, enm.fprecision,
+                     enm.fexclusive]:
+            self.assertFalse(fptr)
+        self.assertIsNone(enm.state)
         self.assertEqual(lib.energymon_get_default(byref(enm)), 0)
+        # Now function pointers should be populated
+        for fptr in [enm.finit, enm.fread, enm.ffinish, enm.fsource, enm.finterval, enm.fprecision,
+                     enm.fexclusive]:
+            self.assertTrue(fptr)
+        # we can't say anything about enm.state - it's implementation-specific (might still be NULL)
         return enm
 
     def test_get_default_energymon(self):
