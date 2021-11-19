@@ -79,6 +79,17 @@ def get_energymon(lib, func_get='energymon_get_default') -> energymon:
     if energymon_get_impl(byref(em)) != 0:
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
+    # The native getter function is supposed to populate all function pointer fields.
+    # Failure to do so is a bug in the native library.
+    # However, trying to use an uninitialized function pointer in Python still causes a segfault.
+    # It's preferable to assert their initialization rather than leaving it to the user to debug.
+    assert em.finit
+    assert em.fread
+    assert em.ffinish
+    assert em.fsource
+    assert em.finterval
+    assert em.fprecision
+    assert em.fexclusive
     return em
 
 def init(em: energymon):
