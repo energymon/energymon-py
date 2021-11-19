@@ -33,6 +33,16 @@ class TestEnergymonUtil(unittest.TestCase):
         self.assertIsNone(util.init(enm))
         self.assertIsNone(util.finish(enm))
 
+    def test_init_unget(self):
+        enm = energymon()
+        with self.assertRaises(ValueError):
+            util.init(enm)
+
+    def test_finish_unget(self):
+        enm = energymon()
+        with self.assertRaises(ValueError):
+            util.finish(enm)
+
     def test_get_uj(self):
         enm = util.get_energymon(load_default_lib())
         util.init(enm)
@@ -41,12 +51,22 @@ class TestEnergymonUtil(unittest.TestCase):
         self.assertTrue(ret >= 0)
         util.finish(enm)
 
+    def test_get_uj_unget(self):
+        enm = energymon()
+        with self.assertRaises(ValueError):
+            util.get_uj(enm)
+
     def test_source(self):
         enm = util.get_energymon(load_default_lib())
         util.init(enm)
         ret = util.get_source(enm)
         self.assertIsInstance(ret, str)
         util.finish(enm)
+
+    def test_get_source_unget(self):
+        enm = energymon()
+        with self.assertRaises(ValueError):
+            util.get_source(enm)
 
     def test_interval_us(self):
         enm = util.get_energymon(load_default_lib())
@@ -56,6 +76,11 @@ class TestEnergymonUtil(unittest.TestCase):
         self.assertTrue(ret >= 0)
         util.finish(enm)
 
+    def test_interval_us_unget(self):
+        enm = energymon()
+        with self.assertRaises(ValueError):
+            util.get_interval_us(enm)
+
     def test_precision_uj(self):
         enm = util.get_energymon(load_default_lib())
         util.init(enm)
@@ -64,12 +89,22 @@ class TestEnergymonUtil(unittest.TestCase):
         self.assertTrue(ret >= 0)
         util.finish(enm)
 
+    def test_get_precision_uj_unget(self):
+        enm = energymon()
+        with self.assertRaises(ValueError):
+            util.get_precision_uj(enm)
+
     def test_is_exclusive(self):
         enm = util.get_energymon(load_default_lib())
         util.init(enm)
         ret = util.is_exclusive(enm)
         self.assertIsInstance(ret, bool)
         util.finish(enm)
+
+    def test_is_exclusive_unget(self):
+        enm = energymon()
+        with self.assertRaises(ValueError):
+            util.is_exclusive(enm)
 
 
 if __name__ == '__main__':
