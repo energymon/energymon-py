@@ -32,14 +32,14 @@ If using this project for other scientific works or publications, please referen
 
 ## Dependencies
 
-The `energymon` libraries should be installed to the system and on the library search path (e.g., `LD_LIBRARY_PATH`).
+The `energymon` libraries should be installed to the system and on the library search path (e.g., `LD_LIBRARY_PATH` on Linux/POSIX systems or `DYLD_LIBRARY_PATH` on macOS systems).
 
 The latest `energymon` C libraries can be found at https://github.com/energymon/energymon.
 
 
 ## Installing
 
-The `energymon` package is published in the Python Package Index and installable with pip:
+Versioned releases of the `energymon` package are published in the Python Package Index and installable with pip:
 
 ```sh
 pip install energymon
@@ -55,28 +55,15 @@ pip install .
 ## Usage
 
 The module exposes an `energymon` class, which is a binding to the `energymon` C struct.
-First, users are responsible for loading an energymon library using ctypes.
-For example:
 
-```Python
-from ctypes import CDLL
-from ctypes.util import find_library
-
-# maybe try to find the library by name:
-lib_path = find_library("energymon-default")
-if lib_path is None:
-    # maybe fall back on a relative or absolute path
-    lib_path = "libenergymon-default.so"
-lib = CDLL(lib_path, use_errno=True)
-```
-
-The module exposes some utilities to simplify usage, e.g., to "get" the energymon, handle pointers, convert data types, check for errors, and raise exceptions.
-For example:
+While you may use the bindings directly, the module exposes some utilities to simplify usage, e.g., to load the library, "get" the energymon, handle pointers, convert data types, check for errors, and raise exceptions.
+For example, to use the `energymon-default` library:
 
 ```Python
 from energymon import util
 
-em = util.get_energymon(lib, 'energymon_get_default')
+lib = util.load_energymon_library()
+em = util.get_energymon(lib)
 print(util.get_source(em))
 util.init(em)
 try:
@@ -88,17 +75,23 @@ finally:
 
 ### Direct bindings
 
-To directly use the energymon API, create and "get" the struct to populate its function pointers, then initialize, do work, and cleanup when finished.
+To directly use the energymon API, first load the library, create and "get" the struct to populate its function pointers, then initialize, do work, and cleanup when finished.
 For example:
 
 ```Python
-from ctypes import pointer, create_string_buffer, sizeof, set_errno, get_errno
+from ctypes import CDLL, byref, create_string_buffer, sizeof, set_errno, get_errno
+from ctypes.util import find_library
 from energymon import energymon
 
-em = energymon()
-pem = pointer(em)
+# try to find the library by name:
+lib_path = find_library('energymon-default')
+if lib_path is None:
+    # maybe fall back on a relative or absolute path
+    lib_path = 'libenergymon-default.so'
 
-if lib.energymon_get_default(pem) != 0:
+lib = CDLL(lib_path, use_errno=True)
+em = energymon()
+if lib.energymon_get_default(byref(em)) != 0:
     # handle error...
     exit(1)
 
@@ -108,17 +101,17 @@ if not em.fsource(name, sizeof(name)):
     exit(1)
 
 print(name.value.decode())
-if em.finit(pem) != 0:
+if em.finit(byref(em)) != 0:
     # handle error
     exit(1)
 
 set_errno(0)
-uj = em.fread(pem)
+uj = em.fread(byref(em))
 if uj == 0 and get_errno() != 0:
     # handle error (but don't skip cleanup!)
     pass
 
-if em.ffinish(pem) != 0:
+if em.ffinish(byref(em)) != 0:
     # handle error
     exit(1)
 ```
