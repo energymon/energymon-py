@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Minimum Python version is now 3.6.
+- Use c_uint64 instead of c_ulonglong for energymon fread, finterval, and fprecision return types
 
 ### Removed
 - The `energymon` submodule - C structure bindings now specified at module top level.
