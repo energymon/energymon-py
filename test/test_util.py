@@ -8,12 +8,18 @@ def load_default_lib():
     Requires library to be discoverable, e.g., on LD_LIBRARY_PATH (POSIX systems) or
     DYLD_LIBRARY_PATH (OSX systems).
     """
-    lib_path = ctypes.util.find_library('energymon-default')
-    return ctypes.CDLL(lib_path, use_errno=True)
+    return util.load_energymon_library()
 
 
 class TestEnergymonUtil(unittest.TestCase):
     """Test energymon util functions."""
+
+    def test_load_energymon_library(self):
+        self.assertIsInstance(util.load_energymon_library(), ctypes.CDLL)
+
+    def test_load_energymon_library_bad(self):
+        with self.assertRaises(FileNotFoundError):
+            util.load_energymon_library('!@#$%^&*()')
 
     def test_get_energymon(self):
         enm = util.get_energymon(load_default_lib())

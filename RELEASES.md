@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minimum Python version specification in setup.
 - Sphinx documentation - published on [Read the Docs](https://energymon-py.readthedocs.io/).
 - Unit tests.
+- Function in util submodule: 'load_energymon_library'.
 
 ### Changed
 - Minimum Python version is now 3.6.

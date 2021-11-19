@@ -4,12 +4,44 @@ Utilities for using an ``energymon``.
 
 See documentation in the native ``energymon.h`` header file for additional details.
 """
-import os
 from ctypes import (
-    CFUNCTYPE, POINTER,
+    CDLL, CFUNCTYPE, POINTER,
     byref, c_int, create_string_buffer, get_errno, set_errno, sizeof
 )
+from ctypes.util import find_library
+import os
+import platform
 from . import energymon
+
+def load_energymon_library(name: str='energymon-default'):
+    """
+    Load an energymon library by name (no leading 'lib' or trailing extensions or version number).
+
+    Recommend setting ``LD_LIBRARY_PATH`` on Linux/POSIX, ``DYLD_LIBRARY_PATH`` on OSX, and ``PATH``
+    on Windows.
+
+    Parameters
+    ----------
+    name: str, optional
+        The library name to search for.
+
+    Returns
+    -------
+    A ``ctypes`` library, e.g., a ``CDLL``
+        The loaded shared library.
+    """
+    path = find_library(name)
+    if path is None:
+        system = platform.system()
+        if system == 'Darwin':
+            suffix = '.dylib'
+        elif system == 'Windows':
+            suffix = '.dll'
+        else:
+            suffix = '.so'
+        path = 'lib' + name + suffix
+        raise FileNotFoundError('Failed to find library by name: ' + name + ' (' + path + ')')
+    return CDLL(path, use_errno=True, use_last_error=True)
 
 def get_energymon(lib, func_get='energymon_get_default') -> energymon:
     """
