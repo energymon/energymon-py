@@ -3,14 +3,6 @@ import ctypes
 import unittest
 from energymon import energymon, util
 
-def load_default_lib():
-    """
-    Requires library to be discoverable, e.g., on LD_LIBRARY_PATH (POSIX systems) or
-    DYLD_LIBRARY_PATH (OSX systems).
-    """
-    return util.load_energymon_library()
-
-
 class TestEnergymonUtil(unittest.TestCase):
     """Test energymon util functions."""
 
@@ -22,14 +14,14 @@ class TestEnergymonUtil(unittest.TestCase):
             util.load_energymon_library('!@#$%^&*()')
 
     def test_get_energymon(self):
-        enm = util.get_energymon(load_default_lib())
+        enm = util.get_energymon(util.load_energymon_library())
         self.assertIsInstance(enm, energymon)
         for fptr in [enm.finit, enm.fread, enm.ffinish, enm.fsource, enm.finterval, enm.fprecision,
                      enm.fexclusive]:
             self.assertTrue(fptr)
 
     def test_init_finish(self):
-        enm = util.get_energymon(load_default_lib())
+        enm = util.get_energymon(util.load_energymon_library())
         self.assertIsNone(util.init(enm))
         self.assertIsNone(util.finish(enm))
 
@@ -44,7 +36,7 @@ class TestEnergymonUtil(unittest.TestCase):
             util.finish(enm)
 
     def test_get_uj(self):
-        enm = util.get_energymon(load_default_lib())
+        enm = util.get_energymon(util.load_energymon_library())
         util.init(enm)
         ret = util.get_uj(enm)
         self.assertIsInstance(ret, int)
@@ -57,7 +49,7 @@ class TestEnergymonUtil(unittest.TestCase):
             util.get_uj(enm)
 
     def test_source(self):
-        enm = util.get_energymon(load_default_lib())
+        enm = util.get_energymon(util.load_energymon_library())
         util.init(enm)
         ret = util.get_source(enm)
         self.assertIsInstance(ret, str)
@@ -69,7 +61,7 @@ class TestEnergymonUtil(unittest.TestCase):
             util.get_source(enm)
 
     def test_interval_us(self):
-        enm = util.get_energymon(load_default_lib())
+        enm = util.get_energymon(util.load_energymon_library())
         util.init(enm)
         ret = util.get_interval_us(enm)
         self.assertIsInstance(ret, int)
@@ -82,7 +74,7 @@ class TestEnergymonUtil(unittest.TestCase):
             util.get_interval_us(enm)
 
     def test_precision_uj(self):
-        enm = util.get_energymon(load_default_lib())
+        enm = util.get_energymon(util.load_energymon_library())
         util.init(enm)
         ret = util.get_precision_uj(enm)
         self.assertIsInstance(ret, int)
@@ -95,7 +87,7 @@ class TestEnergymonUtil(unittest.TestCase):
             util.get_precision_uj(enm)
 
     def test_is_exclusive(self):
-        enm = util.get_energymon(load_default_lib())
+        enm = util.get_energymon(util.load_energymon_library())
         util.init(enm)
         ret = util.is_exclusive(enm)
         self.assertIsInstance(ret, bool)
