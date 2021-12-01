@@ -14,14 +14,7 @@ def run():
     if len(sys.argv) > 2:
         fn_get_name = sys.argv[2]
 
-    # First try to find the library
-    # Interestingly, this doesn't seem to work on OSX when given the full path
-    lib_path = find_library(lib_name)
-    if lib_path is None:
-        # Fall back on using the given string (presumed relative or absolute path)
-        lib_path = lib_name
-    lib = CDLL(lib_path, use_errno=True)
-
+    lib = util.load_energymon_library(lib_name)
     em = util.get_energymon(lib, fn_get_name)
     print('source:', util.get_source(em))
     util.init(em)
