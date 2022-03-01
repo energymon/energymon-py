@@ -9,6 +9,14 @@ energymon package
 Submodules
 ----------
 
+energymon.context module
+------------------------
+
+.. automodule:: energymon.context
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 energymon.util module
 ---------------------
 
