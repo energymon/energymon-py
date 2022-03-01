@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Class `context.EnergyMon`: A wrapper class and context manager for an `energymon`.
+
 ### Changed
 - Example program now uses `util.load_energymon_library`.
 

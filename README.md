@@ -116,6 +116,26 @@ if em.ffinish(byref(em)) != 0:
     exit(1)
 ```
 
+### Context Management
+
+The `context` submodule provides the `EnergyMon` class, which is both a wrapper around `energymon` and a Python context manager.
+As a context manager, the class handles the `energymon` lifecycle, and is both reentrant and reusable.
+For example, to use as a context manager:
+
+```Python
+from energymon.context import EnergyMon
+
+with EnergyMon() as em:
+    print('source:', em.get_source())
+    print('exclusive:', em.is_exclusive())
+    print('interval (usec):', em.get_interval_us())
+    print('precision (uJ):', em.get_precision_uj())
+    print('reading (uJ):', em.get_uj())
+```
+
+Alternatively, you can manage the lifecycle yourself with `em.init()` and `em.finish()` (instead of using `with ...`).
+Take care to handle exceptions, including correct lifecycle management if not using the automatic context management.
+
 
 ## Project Source
 
