@@ -54,26 +54,11 @@ pip install .
 
 ## Usage
 
-The module exposes an `energymon` class, which is a binding to the `energymon` C struct.
+The following subsections document usage with increasing levels of abstraction.
 
-While you may use the bindings directly, the module exposes some utilities to simplify usage, e.g., to load the library, "get" the energymon, handle pointers, convert data types, check for errors, and raise exceptions.
-For example, to use the `energymon-default` library:
+### Direct Bindings
 
-```Python
-from energymon import util
-
-lib = util.load_energymon_library()
-em = util.get_energymon(lib)
-print(util.get_source(em))
-util.init(em)
-try:
-    print(util.get_uj(em))
-finally:
-    util.finish(em)
-```
-
-
-### Direct bindings
+At the lowest level, the `energymon` package exposes an `energymon` class, which is a binding to the `energymon` C struct.
 
 To directly use the energymon API, first load the library, create and "get" the struct to populate its function pointers, then initialize, do work, and cleanup when finished.
 For example:
@@ -116,9 +101,27 @@ if em.ffinish(byref(em)) != 0:
     exit(1)
 ```
 
+### Utility Functions
+
+Utility functions work with the direct bindings, but simplify their usage by (1) abstracting the user from the Python `ctypes` (including pointers) and (2) raising exceptions when errors are reported by the native library.
+For example, to load the `energymon-default` library, "get" the energymon, and report the energy source and current value:
+
+```Python
+from energymon import util
+
+lib = util.load_energymon_library()
+em = util.get_energymon(lib)
+print(util.get_source(em))
+util.init(em)
+try:
+    print(util.get_uj(em))
+finally:
+    util.finish(em)
+```
+
 ### Context Management
 
-The `context` submodule provides the `EnergyMon` class, which is both a wrapper around `energymon` and a Python context manager.
+The `context` submodule provides the `EnergyMon` class, which is both a wrapper around `energymon` bindings and a Python context manager.
 As a context manager, the class handles the `energymon` lifecycle, and is both reentrant and reusable.
 For example, to use as a context manager:
 
@@ -127,9 +130,6 @@ from energymon.context import EnergyMon
 
 with EnergyMon() as em:
     print('source:', em.get_source())
-    print('exclusive:', em.is_exclusive())
-    print('interval (usec):', em.get_interval_us())
-    print('precision (uJ):', em.get_precision_uj())
     print('reading (uJ):', em.get_uj())
 ```
 
