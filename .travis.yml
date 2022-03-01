@@ -1,25 +1,30 @@
+dist: focal
+
 matrix:
   include:
-    # xenial runs all versions listed below by default
+    # focal runs all versions listed below by default
     - os: linux
       dist: xenial
     # test the oldest and newest python versions for linux dists
     - os: linux
-      dist: focal
+      dist: xenial
       python: "3.6"
+    # 3.10 doesn't exist in xenial (and 3.10-dev doesn't work anymore)
     - os: linux
-      dist: focal
-      python: "3.10-dev"
+      dist: xenial
+      python: "3.9"
     - os: linux
       dist: bionic
       python: "3.6"
     - os: linux
       dist: bionic
-      python: "3.10-dev"
+      python: "3.10"
     # test recent osx xcode
     - os: osx
       osx_image: xcode12.5
       language: shell       # 'language: python' is an error on Travis CI macOS
+  allow_failures:
+    - python: "nightly"
 
 language: python
 
@@ -28,8 +33,8 @@ python:
   - "3.7"
   - "3.8"
   - "3.9"
-  - "3.10-dev"
-  # - "3.9-dev"  # 3.9 development branch
+  - "3.10"
+  - "3.11-dev"
   - "nightly"  # nightly build
 
 before_install:
