@@ -1,7 +1,8 @@
 """
 Context management for using an ``energymon``.
 """
-from ctypes import CDLL
+from ctypes import byref, CDLL, get_errno, set_errno
+import os
 from typing import Union
 import warnings
 from . import util
@@ -152,7 +153,14 @@ class EnergyMon:
             warnings.warn('unfinished energymon', category=ResourceWarning, source=self)
             # force finish
             self._refcount = 0
-            util.finish(self._ctx)
+            # Ideally we'd use util.finish(), but when the Python interpreter is shutting down,
+            # util may have already been unloaded (set to None), so operate directly on the struct.
+            if not self._ctx.ffinish:
+                raise RuntimeError('\'ffinish\' not set - cannot cleanup the native energymon')
+            set_errno(0)
+            if self._ctx.ffinish(byref(self._ctx)) != 0:
+                errno = get_errno()
+                raise OSError(errno, os.strerror(errno))
 
     # Limit copying and pickling
 

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Exception in `EnergyMon.__del__` when user doesn't finish before Python interpreter is shutdown ([#2])
+
+
 ## [0.1.0] - 2022-03-01
 
 ### Added
@@ -33,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
+[Unreleased]: https://github.com/energymon/energymon-py/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/energymon/energymon-py/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/energymon/energymon-py/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/energymon/energymon-py/releases/tag/v0.0.1
+[#2]: https://github.com/energymon/energymon-py/issues/2
