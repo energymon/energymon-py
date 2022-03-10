@@ -56,3 +56,4 @@ script:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$(pwd)/energymon/_build/dummy; fi
   - python3 -m unittest -v
   - python3 examples/info.py
+  - python3 examples/context.py
