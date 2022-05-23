@@ -1,4 +1,5 @@
 # pylint: disable=C0114, C0116
+import gc
 import pickle
 import unittest
 from energymon import util
@@ -69,6 +70,9 @@ class TestEnergyMon(unittest.TestCase):
         enm.init()
         with self.assertWarns(ResourceWarning):
             del enm
+            # CPython runs `__del__` synchronously when `del` is invoked
+            # PyPy doesn't use reference counting though, so we must force gc
+            gc.collect()
 
     def test_context(self):
         with EnergyMon() as enm:
