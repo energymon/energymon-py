@@ -45,6 +45,12 @@ Versioned releases of the `energymon` package are published in the Python Packag
 pip install energymon
 ```
 
+and through Conda Forge:
+
+```sh
+conda install energymon
+```
+
 To install from source:
 
 ```sh
