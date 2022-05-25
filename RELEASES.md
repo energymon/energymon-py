@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Installation and Getting Started instructions in Sphinx documentation.
+
 ### Fixed
 - Context manager `ResourceWarning` test to work with PyPy.
 
