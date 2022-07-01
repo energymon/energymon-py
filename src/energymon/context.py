@@ -39,7 +39,7 @@ class EnergyMon:
         """bool: True if the ``energymon`` is initialized, False otherwise."""
         return self._refcount > 0
 
-    def init(self):
+    def init(self) -> None:
         """
         Initialize the underlying ``energymon``.
 
@@ -50,7 +50,7 @@ class EnergyMon:
         util.init(self._ctx)
         self._refcount += 1
 
-    def finish(self):
+    def finish(self) -> None:
         """
         Finish the underlying ``energymon``.
         If not already initialized, this is a no-op.

@@ -43,7 +43,7 @@ def load_energymon_library(name: str='energymon-default'):
         raise FileNotFoundError('Failed to find library by name: ' + name + ' (' + path + ')')
     return CDLL(path, use_errno=True, use_last_error=True)
 
-def get_energymon(lib, func_get='energymon_get_default') -> energymon:
+def get_energymon(lib, func_get: str='energymon_get_default') -> energymon:
     """
     Create an ``energymon`` and "get" it (populate its function pointers), but do not initialize it.
 
@@ -92,7 +92,7 @@ def get_energymon(lib, func_get='energymon_get_default') -> energymon:
     assert em.fexclusive
     return em
 
-def init(em: energymon):
+def init(em: energymon) -> None:
     """
     Initialize the ``energymon`` (initialize private state).
 
@@ -115,7 +115,7 @@ def init(em: energymon):
         errno = get_errno()
         raise OSError(errno, os.strerror(errno))
 
-def finish(em: energymon):
+def finish(em: energymon) -> None:
     """
     Finish the ``energymon`` (clean up private state).
 
