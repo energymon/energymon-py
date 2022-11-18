@@ -18,13 +18,13 @@ matrix:
       python: "3.6"
     - os: linux
       dist: bionic
-      python: "3.10"
+      python: "3.11"
     - os: linux
       dist: focal
       python: "3.6"
     - os: linux
       dist: focal
-      python: "3.10"
+      python: "3.11"
     # test recent osx xcode
     - os: osx
       osx_image: xcode12.5
@@ -39,7 +39,8 @@ python:
   - "3.8"
   - "3.9"
   - "3.10"
-  - "3.11-dev"
+  - "3.11"
+  - "3.12-dev"
   - "nightly"  # nightly build
   - "pypy3.7-7.3.9"
   - "pypy3.8-7.3.9"
