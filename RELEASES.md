@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Explicit `.readthedocs.yaml` config file, now required by RTD.
+
 ### Fixed
 - The `__init__.py` filename in the examples directory.
 
