@@ -24,7 +24,7 @@ matrix:
       python: "3.6"
     - os: linux
       dist: focal
-      python: "3.11"
+      python: "3.12"
     # test recent osx xcode
     - os: osx
       osx_image: xcode12.5
@@ -40,7 +40,8 @@ python:
   - "3.9"
   - "3.10"
   - "3.11"
-  - "3.12-dev"
+  - "3.12"
+  # - "3.13-dev"
   - "nightly"  # nightly build
   - "pypy3.7-7.3.9"
   - "pypy3.8-7.3.9"
