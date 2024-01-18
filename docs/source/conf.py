@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('../../src'))
 # -- Project information -----------------------------------------------------
 
 project = 'energymon'
-copyright = '2021-2023, Connor Imes'
+copyright = '2021-2024, Connor Imes'
 author = 'Connor Imes'
 
 def get_version():
