@@ -1,0 +1,42 @@
+name: Run Python Tests
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: [ '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', 'pypy-3.7', 'pypy-3.8', 'pypy-3.9', 'pypy-3.10' ]
+    name: ${{ matrix.os }} Python ${{ matrix.python-version }} Test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install EnergyMon library
+        # energymon dependency - use master branch
+        run: |
+          git clone https://github.com/energymon/energymon.git
+          cmake -DBUILD_SHARED_LIBS=ON -DENERGYMON_BUILD_DEFAULT=dummy -DENERGYMON_BUILD_LIB=NONE -DENERGYMON_BUILD_UTILITIES=OFF -DENERGYMON_BUILD_TESTS=OFF -DENERGYMON_BUILD_EXAMPLES=OFF -S energymon/ -B energymon/_build/
+          cmake --build energymon/_build/ -v
+      - name: Install Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Python dependencies and package
+        run: |
+          python3 -m pip install -U pip
+          python3 -m pip install . -v
+      - name: Run tests
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/energymon/_build/dummy; fi
+          if [ "$RUNNER_OS" = "macOS" ]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$(pwd)/energymon/_build/dummy; fi
+          python3 -m unittest -v
+          python3 examples/info.py
+          python3 examples/context.py
